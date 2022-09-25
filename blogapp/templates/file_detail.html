@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+{% for message in messages %}
+<div class="alert {{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+</div>
+{% endfor %}
+<div>
+    <div>
+        <div class="item" style="padding-top: 15px;">
+            <p style="text-align: center; font-size: 0.8em;">
+                {% if 'mp4' in fileupload.imgfile.url %}
+                <video autoplay controls loop muted>
+                    <source src="{{ fileupload.imgfile.url }}" type="video/mp4">
+                    Nope!
+                </video> <br>
+                {% else %}
+                <img src="{{ fileupload.imgfile.url }}" alt=""> <br>
+                {% endif %}
+                <div style="text-align: center;">
+                    <h2 style="font-weight: bold;">{{ fileupload.title }}</h2><br>
+                    <p class="lead">writer: {{fileupload.user}} <br></p>
+                    <p class="lead">created_at: {{board.created_at}} <br></p>
+                    <p class="lead">updated_at: {{board.updated_at}} <br></p>
+                    <p class="lead">content: {{fileupload.content}} <br></p>
+                </div>
+            </p>
+        </div>
+        <a class="page-link" href="/file">back</a>
+    </div>
+</div>
+<a href="/download?path={{ fileupload.imgfile }}">{{ fileupload.imgfile }}</a>
+{% endblock %}

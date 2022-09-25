@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+{% for message in messages %}
+<div class="alert {{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+</div>
+{% endfor %}
+<div class="wrapper">
+    <div style="text-align: center;">
+        <h1>Sign in</h1>
+        <form method="POST">
+            {% csrf_token %}
+            ID:
+            <br>
+            <input name="username" type="text">
+            <br>
+            Password:
+            <br>
+            <input name="password" type="password">
+            <br><br>
+            <input type="submit" class="btn btn-primary" value="Login">
+        </form>
+    </div>
+</div>
+{% endblock %}

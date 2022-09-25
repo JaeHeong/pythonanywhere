@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+{% for message in messages %}
+<div class="alert {{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    {{ message }}
+</div>
+{% endfor %}
+<div style="width:1200px; margin:0px auto;">
+    <h2 style="text-align:center;">Gallery</h2><br>
+    {% if fileupload %}
+    <table style="text-align:center; width:1200px; border:1px solid black;" class="table">
+        <thead>
+            <tr class="th_color">
+                <th>Ticket No.</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>File</th>
+                <th>Writer</th>
+                <th>Created at</th>
+                <th>Updated at</th>
+                <th>Modify</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        {% for fileupload_list in fileupload %}
+        <tbody>
+            <tr class="td_color">
+                <td>TT:{{ fileupload_list.pk }}</td>
+                <td><button class="btn btn-sm rounded-pill" onclick="location.href='/filedetail/{{fileupload_list.pk}}'">{{ fileupload_list.title }}</button></td>
+                <td><button class="btn btn-sm rounded-pill" onclick="location.href='/filedetail/{{fileupload_list.pk}}'">{{ fileupload_list.content }}</button></td>
+                <td><button class="btn btn-sm rounded-pill" onclick="location.href='/filedetail/{{fileupload_list.pk}}'">{{ fileupload_list.imgfile }}</button></td>
+                <td>{{ fileupload_list.user }}</td>
+                <td>{{ fileupload_list.created_at }}</td>
+                <td>{{ fileupload_list.updated_at }}</td>
+                {% if user.is_authenticated %}
+                <td><button class="btn btn-secondary btn-sm rounded-pill" onclick="location.href='/fileedit/{{fileupload_list.pk}}'">Modify</button></td>
+                <td><button class="btn btn-danger btn-sm rounded-pill" onclick="location.href='/filedelete/{{fileupload_list.pk}}'">Delete</button></td>
+                {% else %}
+                <td>guest</td>
+                <td>guest</td>
+                {% endif %}
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
+    {% else %}
+    No page
+    {% endif %}
+    <div id="paging">
+        <ul class="pagination justify-content-center" style="margin-top: 2rem;">
+            <li class="page-item">
+                <a class="page-link" href="?page=1"><<</a>
+            </li>
+            {% if fileupload.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ fileupload.previous_page_number }}">Previous</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">Previous</a>
+            </li>
+            {% endif %}
+            <a class="page-link" tabindex="-1">{{ fileupload.number }} / {{ fileupload.paginator.num_pages }}</a>
+            {% if fileupload.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ fileupload.next_page_number }}">Next</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">Next</a>
+            </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ fileupload.paginator.num_pages }}">>></a>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <form class="search_box" action="" method="get">
+            <select class="btn-group" name="type" style="width: 100px;">
+                <option value="all">All</option>
+                <option value="title_content">Title + Content</option>
+                <option value="title">Title</option>
+                <option value="content">Content</option>
+                <option value="writer">Writer</option>
+            </selectclass="table-active">
+            <input style="display: inline-block; width: 100px;" class="form-control" type="text" name="q" placeholder="---search----">
+            <input style="display: inline-block; width: 100px;" class="btn btn-primary" type="submit" value="Submit">
+        </form>
+    </div>
+    {% if user.is_authenticated %}
+    <button style="float: right;" class="btn btn-primary" onclick="location.href='/fileupload'">File Upload</button>
+    {% endif %}
+</div>
+{% endblock %}
